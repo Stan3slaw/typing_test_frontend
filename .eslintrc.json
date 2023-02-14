@@ -1,0 +1,132 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "airbnb",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "plugin:prettier/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript"
+  ],
+  "plugins": ["import", "prettier", "@typescript-eslint", "react-hooks", "filenames"],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "jest": true,
+    "browser": true,
+    "es6": true
+  },
+  "rules": {
+    "no-console": [
+      "warn",
+      {
+        "allow": ["warn", "error"]
+      }
+    ],
+    "no-multiple-empty-lines": "error",
+    "no-unused-expressions": "error",
+    "no-implicit-coercion": "error",
+    "no-useless-constructor": "off",
+    "no-magic-numbers": [
+      "error",
+      {
+        "ignoreArrayIndexes": true,
+        "ignoreDefaultValues": true,
+        "enforceConst": false,
+        "detectObjects": false,
+        "ignore": [-1, 0, 1]
+      }
+    ],
+    "arrow-body-style": ["error", "as-needed"],
+    "quotes": ["error", "single"],
+    "curly": ["error", "all"],
+    "consistent-return": "warn",
+    "newline-before-return": "error",
+    "lines-between-class-members": [
+      "error",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ],
+    "padding-line-between-statements": ["error", { "blankLine": "always", "prev": "const", "next": "export" }],
+    "import/no-cycle": "off",
+    "import/no-duplicates": "error",
+    "import/imports-first": ["error", "absolute-first"],
+    "import/newline-after-import": "error",
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", ["internal", "parent", "sibling", "index"]],
+        "newlines-between": "always-and-inside-groups"
+      }
+    ],
+    "import/no-unresolved": "off",
+    "import/extensions": "off",
+    "import/prefer-default-export": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error",
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".ts", ".tsx"]
+      }
+    ],
+    "react/function-component-definition": ["error", { "namedComponents": "arrow-function" }],
+    "react/jsx-pascal-case": ["error"],
+    "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": "off",
+    "react/button-has-type": "off",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/no-use-before-define": ["error", { "variables": false }],
+    "@typescript-eslint/explicit-function-return-type": [
+      "error",
+      {
+        "allowExpressions": true
+      }
+    ],
+    "@typescript-eslint/interface-name-prefix": 0,
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "@typescript-eslint/no-empty-interface": "error"
+  },
+  "overrides": [
+    {
+      "files": ["src/store/**/*.reducer.ts"],
+      "rules": {
+        "default-param-last": "off"
+      }
+    },
+    {
+      "files": ["src/store/saga.ts", "src/store/**/*.sagas.ts"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    },
+    {
+      "files": ["src/store/**/*.*.ts", "src/core/constants/*.constants.ts", "src/core/services/**/constants.ts"],
+      "rules": {
+        "import/prefer-default-export": "off"
+      }
+    },
+    {
+      "files": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/store/**/*.sagas.test.ts"],
+      "rules": {
+        "no-magic-numbers": "off",
+        "import/no-extraneous-dependencies": "off"
+      }
+    }
+  ]
+}
