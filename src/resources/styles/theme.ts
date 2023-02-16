@@ -12,7 +12,7 @@ const theme = createTheme({
           props: {},
           style: {
             height: '55px',
-            borderRadius: '5px',
+            borderRadius: '8px',
             backgroundColor: '#fff',
             fontSize: '30px',
           },

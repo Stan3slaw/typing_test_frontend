@@ -1,1 +1,8 @@
-export type SocketEvents = 'onInputChange' | 'onInputCheck' | 'onSubmitInput';
+export type SocketEvents =
+  | 'onInputChange'
+  | 'onInputCheck'
+  | 'onInputSubmit'
+  | 'getCurrentWordIndex'
+  | 'loadMoreWords'
+  | 'getWords'
+  | 'refreshWords';

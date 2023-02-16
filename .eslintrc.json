@@ -29,6 +29,7 @@
         "allow": ["warn", "error"]
       }
     ],
+    "no-shadow": "off",
     "no-multiple-empty-lines": "error",
     "no-unused-expressions": "error",
     "no-implicit-coercion": "error",
@@ -100,7 +101,8 @@
         "argsIgnorePattern": "^_"
       }
     ],
-    "@typescript-eslint/no-empty-interface": "error"
+    "@typescript-eslint/no-empty-interface": "error",
+    "@typescript-eslint/no-shadow": ["error"]
   },
   "overrides": [
     {
