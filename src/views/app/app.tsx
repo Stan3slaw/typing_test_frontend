@@ -1,5 +1,6 @@
-import { Box, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
+import { BiRevision } from 'react-icons/bi';
 
 import wordsApiService from '../../core/services/api/words/words-api.service';
 import {
@@ -14,9 +15,10 @@ import {
 import type { Word } from '../../core/types/word.types';
 import { MAX_WORDS_NUMBER_IN_ROW } from '../../core/constants/words.constants';
 import useTimer from '../../core/hooks/use-timer/use-timer';
-import { TEN_SECONDS } from '../../core/hooks/use-timer/constants';
 import Modal from '../../components/modal/modal';
 import TimerStatuses from '../../core/hooks/use-timer/enums';
+import Timer from '../../components/timer/timer';
+import WordsList from './words-list/words-list';
 
 const mainLayoutStyles = {
   display: 'flex',
@@ -27,41 +29,18 @@ const mainLayoutStyles = {
 const contentWraperStyles = {
   width: '700px',
 };
-const wordsListContainerStyles = {
-  height: '120px',
-  padding: '10px 12px',
-  marginBottom: '10px',
-  overflow: 'hidden',
-  lineHeight: '45px',
-  background: '#fff',
-  border: '1px solid #8eb6d8',
-  borderRadius: '8px',
-};
-const wordStyles = { fontSize: '30px', mr: '10px' };
 const inputContainerStyles = { display: 'flex' };
-const timerStyles = {
-  background: '#3c4d5c',
-  marginLeft: '20px',
-  borderRadius: '8px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontSize: '30px',
-  color: '#fff',
-  paddingX: '10px',
-  cursor: 'default',
-};
-const scoreMessageStyles = { fontSize: '18px' };
+const scoreMessageStyles = { fontSize: 18 };
+const refreshButtonStyles = { fontSize: 28 };
 
 const App: React.FC = () => {
   const [words, setWords] = useState<Word[]>([]);
   const [inputWord, setInputWord] = useState('');
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isInputValid, setIsInputValid] = useState(true);
-  const [shouldTimerStart, setShouldTimerStart] = useState(false);
   const [totalScore, setTotalScore] = useState(0);
 
-  const [minutes, seconds, timerStatus, setTimerStatus] = useTimer(shouldTimerStart);
+  const [minutes, seconds, timerStatus, setTimerStatus] = useTimer();
 
   useEffect(() => {
     (async () => {
@@ -109,39 +88,33 @@ const App: React.FC = () => {
   };
 
   const handleTimerStart = (): void => {
-    if (!shouldTimerStart) {
-      setShouldTimerStart(true);
+    if (timerStatus === TimerStatuses.STOPPED) {
+      setTimerStatus(TimerStatuses.STARTED);
     }
   };
 
-  const onModalClose = (): void => {
+  const refreshState = (): void => {
     refreshWordsEvent.emit();
-    setTimerStatus(TimerStatuses.STOPPED);
-    setShouldTimerStart(false);
     setInputWord('');
     setIsInputValid(true);
     setTotalScore(0);
+  };
+
+  const onModalClose = (): void => {
+    setTimerStatus(TimerStatuses.STOPPED);
+    refreshState();
+  };
+
+  const handleWordsRefresh = (): void => {
+    setTimerStatus(TimerStatuses.REFRESHED);
+    refreshState();
   };
 
   return (
     <>
       <Box sx={mainLayoutStyles}>
         <Box sx={contentWraperStyles}>
-          <Box sx={wordsListContainerStyles}>
-            {words.map((word, index) => (
-              <Box
-                display="inline-block"
-                key={`${word.word}`}
-                sx={{
-                  ...wordStyles,
-                  color: !word.isValid || (currentWordIndex === index && !isInputValid) ? 'red' : 'black',
-                  backgroundColor: index < currentWordIndex ? '#EEEEEE' : '#FFFFF',
-                }}
-              >
-                {word.word}
-              </Box>
-            ))}
-          </Box>
+          <WordsList words={words} currentWordIndex={currentWordIndex} isInputValid={isInputValid} />
           <Box sx={inputContainerStyles}>
             <TextField
               fullWidth
@@ -151,9 +124,10 @@ const App: React.FC = () => {
               onKeyPress={handleInputSubmit}
               onKeyDown={handleTimerStart}
             />
-            <Box sx={timerStyles}>
-              {minutes}:{seconds < TEN_SECONDS ? `0${seconds}` : seconds}
-            </Box>
+            <Timer minutes={minutes} seconds={seconds} />
+            <Button variant="contained" sx={refreshButtonStyles} onClick={handleWordsRefresh}>
+              <BiRevision />
+            </Button>
           </Box>
         </Box>
       </Box>

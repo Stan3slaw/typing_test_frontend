@@ -1,6 +1,7 @@
 enum TimerStatuses {
-  STOPPED = 'stopped',
   STARTED = 'started',
+  STOPPED = 'stopped',
+  REFRESHED = 'refreshed',
   ENDED = 'ended',
 }
 

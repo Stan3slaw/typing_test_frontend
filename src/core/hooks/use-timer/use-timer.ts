@@ -5,7 +5,6 @@ import { FIFTY_NINE_SECONDS, ONE_SECOND } from './constants';
 import TimerStatuses from './enums';
 
 const useTimer = (
-  shouldTimerStart?: boolean,
   initialMinutes = 1,
   initialSeconds = 0,
 ): [number, number, TimerStatuses, Dispatch<SetStateAction<TimerStatuses>>] => {
@@ -14,9 +13,9 @@ const useTimer = (
   const [timerStatus, setTimerStatus] = useState<TimerStatuses>(TimerStatuses.STOPPED);
 
   useEffect(() => {
-    let timerInterval: NodeJS.Timer;
+    let timerInterval!: NodeJS.Timer;
 
-    if (shouldTimerStart) {
+    if (timerStatus === TimerStatuses.STARTED) {
       timerInterval = setInterval(() => {
         if (seconds > 0) {
           setSeconds(seconds - 1);
@@ -31,18 +30,21 @@ const useTimer = (
           }
         }
       }, ONE_SECOND);
+    }
 
-      if (timerStatus === TimerStatuses.ENDED) {
-        setMinutes(initialMinutes);
-        setSeconds(initialSeconds);
-        clearInterval(timerInterval);
+    if (timerStatus === TimerStatuses.ENDED || TimerStatuses.REFRESHED) {
+      setMinutes(initialMinutes);
+      setSeconds(initialSeconds);
+      clearInterval(timerInterval);
+      if (timerStatus === TimerStatuses.REFRESHED) {
+        setTimerStatus(TimerStatuses.STOPPED);
       }
     }
 
     return () => {
       clearInterval(timerInterval);
     };
-  }, [minutes, seconds, shouldTimerStart, initialMinutes, initialSeconds, timerStatus]);
+  }, [minutes, seconds, initialMinutes, initialSeconds, timerStatus]);
 
   return [minutes, seconds, timerStatus, setTimerStatus];
 };
