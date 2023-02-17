@@ -32,7 +32,7 @@ const useTimer = (
       }, ONE_SECOND);
     }
 
-    if (timerStatus === TimerStatuses.ENDED || TimerStatuses.REFRESHED) {
+    if (timerStatus === TimerStatuses.ENDED || timerStatus === TimerStatuses.REFRESHED) {
       setMinutes(initialMinutes);
       setSeconds(initialSeconds);
       clearInterval(timerInterval);
